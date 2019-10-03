@@ -5,6 +5,7 @@ import mysql.connector
 credentials_file_name = "credentials.txt"
 path_file_name = "paths.txt"
 query_file_name = "sql_query.sql"
+update_db_query_file = "update_sql_query.sql"
 
 
 def read_from_paths(file_name):
@@ -34,10 +35,15 @@ def print_last_modified_time():
     return time_stamps
 
 
+def read_one_line_from_file(file_name):
+    f = open(file_name)
+    query = f.readline()
+    return query
+
 
 def read_from_db(credentials):
-    f = open(query_file_name)
-    query = f.readline()
+    query = read_one_line_from_file(query_file_name)
+    update_query = read_one_line_from_file(update_db_query_file)
     db_credentials = []
     for each_credential in credentials:
         db_credentials.append(each_credential)
@@ -52,15 +58,18 @@ def read_from_db(credentials):
     mycursor = mydb.cursor()
     mycursor.execute(query)
     myresult = mycursor.fetchone()
+
     y = 0
-    print(modified_time_of_files)
+        
     for x in myresult:
-        if str(myresult[y]) == modified_time_of_files[y]:
-            print("same")
-        else:
-            print("Time in folder is new")
-        print(myresult[y])
-        y += 1
+        if str(myresult[y]) != modified_time_of_files[y]:
+            column = mycursor.description[y][0]
+            update_query = update_query + column + " =" + \
+                '"{}"'.format(
+                    modified_time_of_files[y]) + " where " + column + " = " + '"{}"'.format(str(myresult[y]))
+            mycursor.execute(update_query)
+            mydb.commit()
+        y+=1
 
 credentials = read_from_file(credentials_file_name)
 modified_time_of_files = (print_last_modified_time())
