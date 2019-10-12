@@ -3,7 +3,6 @@ import time
 import datetime
 import mysql.connector
 
-dirpath = os.getcwd()
 credentials_file_name = "credentials.txt"
 path_file_name = "paths.txt"
 query_file_name = "sql_query.sql"
