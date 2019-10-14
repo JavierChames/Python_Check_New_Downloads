@@ -1,0 +1,23 @@
+1.SQL schema(According to how many paths needed in the app):
+
+CREATE TABLE `Files` (
+  `column1` datetime DEFAULT NULL,
+  `column2` datetime DEFAULT NULL,
+  `column3` datetime DEFAULT NULL,
+  `column4` datetime DEFAULT NULL,
+  `column5` datetime DEFAULT NULL,
+  `column6` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1
+
+2.host_to_ping.txt :
+    What host you want to ping(KODI-Client)
+
+3.paths.txt
+    path of folder you want to check if changed since last update in DB 
+
+4.credentials.txt:
+    connection details and username,password & DB name:
+    localhost
+    username
+    password
+    db_name
