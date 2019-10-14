@@ -24,7 +24,7 @@ def get_modified_time():
 
 def read_from_db(credentials):
 
-    query = "select * from Files"
+    query = "SELECT * FROM Files"
     db_credentials = []
     mydb = mysql.connector.connect(
     host=credentials[0],
@@ -43,10 +43,11 @@ def check_needed_update(sql_result, files_time_stamps, field_names, mycursor, my
     for x in range(len(sql_result)):
         if str(sql_result[x]) != str(files_time_stamps[x]):
             flag += 1
-            update_query_sql = "select * from Files" + field_names[x] + " =" + '"{}"'.format((files_time_stamps[x]))
-            print(update_query_sql)
+            update_query_sql = "UPDATE Files SET " + field_names[x] + " =" + '"{}"'.format((files_time_stamps[x]))
             mycursor.execute(update_query_sql)
             mydb.commit()
+            mycursor.close()
+            mydb.close()
     return flag
 
 def ping_ip():
@@ -55,7 +56,7 @@ def ping_ip():
 def run_docker():
     myCmd = 'docker start kodi-docker'
     os.system(myCmd)
-    time.sleep(90)
+    time.sleep(60)
     myCmd = 'docker stop kodi-docker'
     os.system(myCmd)
 
